@@ -55,6 +55,19 @@ class Hitbox extends FlxSpriteGroup
         hitbox_hint.alpha = 0.3;
         add(hitbox_hint);
 
+        // stupid way to fix crash
+        buttonLeft = new FlxButton(0, 0);
+        buttonDown = new FlxButton(0, 0);
+        buttonUp = new FlxButton(0, 0);
+        buttonRight = new FlxButton(0, 0);
+
+        buttonUp2 = new FlxButton(0, 0);
+        buttonRight2 = new FlxButton(0, 0);
+        buttonLeft2 = new FlxButton(0, 0);
+        buttonDown2 = new FlxButton(0, 0);
+
+        buttonLeft3 = new FlxButton(0, 0);
+
         switch (type){
             case NINE:
             {
