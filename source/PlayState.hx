@@ -39,6 +39,9 @@ import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
 import openfl.display.FPS;
+//#if mobileC
+import ui.Hitbox;
+//#end
 
 using StringTools;
 
@@ -179,6 +182,10 @@ class PlayState extends MusicBeatState
 	var s_ending:Bool = false;
 
 	var gf_launched:Bool = false;
+
+	//#if mobileC
+	var _hitbox:Hitbox;
+	//#end
 
 	override public function create()
 	{
@@ -1020,6 +1027,31 @@ class PlayState extends MusicBeatState
 		scoreTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 
+
+		//#if mobileC
+
+		var curcontrol:HitboxType = DEFAULT;
+
+		switch (SONG.song.toLowerCase()){
+			case 'kaio-ken' | 'blast' | 'super-saiyan':
+				curcontrol = SIX;
+			case 'god-eater':
+				curcontrol = NINE;
+			default:
+				curcontrol = DEFAULT;
+		}
+		_hitbox = new Hitbox(curcontrol);
+
+		var camcontrol = new FlxCamera();
+		FlxG.cameras.add(camcontrol);
+		camcontrol.bgColor.alpha = 0;
+		_hitbox.cameras = [camcontrol];
+
+		_hitbox.visible = false;
+		
+		add(_hitbox);
+		//#end
+
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
 		// UI_camera.zoom = 1;
@@ -1264,7 +1296,21 @@ class PlayState extends MusicBeatState
 					{
 						skip = true;
 					}
-					if (FlxG.keys.justReleased.ANY || skip)
+					
+					#if mobile
+					var justTouched:Bool = false;
+			
+					for (touch in FlxG.touches.list)
+					{
+						justTouched = false;
+						
+						if (touch.justReleased){
+							justTouched = true;
+						}
+					}
+					#end			
+					
+					if (FlxG.keys.justReleased.ANY #if mobile || justTouched #end || skip)
 					{
 						if ((curr_char <= dialogue[curr_dial].length) && !skip)
 						{
@@ -1404,6 +1450,10 @@ class PlayState extends MusicBeatState
 
 	function startCountdown():Void
 	{
+		//#if mobileC
+		_hitbox.visible = true;
+		//#end
+
 		inCutscene = false;
 
 		hudArrows = [];
@@ -2170,7 +2220,7 @@ class PlayState extends MusicBeatState
 			scoreTxt.text = "Score:" + songScore;
 		}
 
-		var pauseBtt:Bool = FlxG.keys.justPressed.ENTER;
+		var pauseBtt:Bool = FlxG.keys.justPressed.ENTER #if android || FlxG.android.justReleased.BACK #end;
 		if (Main.woops)
 		{
 			pauseBtt = FlxG.keys.justPressed.ESCAPE;
@@ -2594,8 +2644,8 @@ class PlayState extends MusicBeatState
 	function endSong():Void
 	{
 		songEnded = true;
-		if (!loadRep)
-			rep.SaveReplay();
+		/*if (!loadRep)
+			rep.SaveReplay();*/
 
 		canPause = false;
 		FlxG.sound.music.volume = 0;
@@ -2651,7 +2701,9 @@ class PlayState extends MusicBeatState
 
 					if (SONG.validScore)
 					{
+						#if newgrounds
 						NGio.unlockMedal(60961);
+						#end
 						Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
 					}
 
@@ -3003,7 +3055,7 @@ class PlayState extends MusicBeatState
 	private function keyShit():Void
 	{
 		// HOLDING
-		var up = controls.UP;
+		/*var up = controls.UP;
 		var right = controls.RIGHT;
 		var down = controls.DOWN;
 		var left = controls.LEFT;
@@ -3016,30 +3068,49 @@ class PlayState extends MusicBeatState
 		var upR = controls.UP_R;
 		var rightR = controls.RIGHT_R;
 		var downR = controls.DOWN_R;
-		var leftR = controls.LEFT_R;
+		var leftR = controls.LEFT_R;*/
 
-		var l1 = controls.L1;
-		var u = controls.U1;
-		var r1 = controls.R1;
-		var l2 = controls.L2;
-		var d = controls.D1;
-		var r2 = controls.R2;
+		// ---------- default ------------
+		var upP = _hitbox.buttonUp.justPressed;
+		var rightP = _hitbox.buttonRight.justPressed;
+		var downP = _hitbox.buttonDown.justPressed;
+		var leftP = _hitbox.buttonLeft.justPressed;
 
-		var l1P = controls.L1_P;
-		var uP = controls.U1_P;
-		var r1P = controls.R1_P;
-		var l2P = controls.L2_P;
-		var dP = controls.D1_P;
-		var r2P = controls.R2_P;
+		var up = _hitbox.buttonUp.pressed;
+		var right = _hitbox.buttonRight.pressed;
+		var down = _hitbox.buttonDown.pressed;
+		var left = _hitbox.buttonLeft.pressed;
 
-		var l1R = controls.L1_R;
-		var uR = controls.U1_R;
-		var r1R = controls.R1_R;
-		var l2R = controls.L2_R;
-		var dR = controls.D1_R;
-		var r2R = controls.R2_R;
+		var upR = _hitbox.buttonUp.justReleased;
+		var rightR = _hitbox.buttonRight.justReleased;
+		var downR = _hitbox.buttonDown.justReleased;
+		var leftR = _hitbox.buttonLeft.justReleased;
 
 
+		// ------------ six control -----------
+		var l1 = controls.L1 || _hitbox.buttonLeft.pressed; // 3
+		var u = controls.U1 || _hitbox.buttonDown.pressed; // 2
+		var r1 = controls.R1 || _hitbox.buttonUp.pressed; // 1
+		var l2 = controls.L2 || _hitbox.buttonRight.pressed; // 4
+		var d = controls.D1 || _hitbox.buttonUp2.pressed; // 5
+		var r2 = controls.R2 || _hitbox.buttonRight2.pressed; // 6
+
+		var l1P = controls.L1_P || _hitbox.buttonLeft.justPressed;
+		var uP = controls.U1_P || _hitbox.buttonDown.justPressed;
+		var r1P = controls.R1_P || _hitbox.buttonUp.justPressed;
+		var l2P = controls.L2_P || _hitbox.buttonRight.justPressed;
+		var dP = controls.D1_P || _hitbox.buttonUp2.justPressed;
+		var r2P = controls.R2_P || _hitbox.buttonRight2.justPressed;
+
+		var l1R = controls.L1_R || _hitbox.buttonLeft.justReleased;
+		var uR = controls.U1_R || _hitbox.buttonDown.justReleased;
+		var r1R = controls.R1_R || _hitbox.buttonUp.justReleased;
+		var l2R = controls.L2_R || _hitbox.buttonRight.justReleased;
+		var dR = controls.D1_R || _hitbox.buttonUp2.justReleased;
+		var r2R = controls.R2_R || _hitbox.buttonRight2.justReleased;
+
+
+		// ---------- nine control ------------
 		var n0 = controls.N0;
 		var n1 = controls.N1;
 		var n2 = controls.N2;
@@ -3554,17 +3625,28 @@ class PlayState extends MusicBeatState
 		{
 			// just double pasting this shit cuz fuk u
 			// REDO THIS SYSTEM!
-			var upP = controls.UP_P;
+			/*var upP = controls.UP_P;
 			var rightP = controls.RIGHT_P;
 			var downP = controls.DOWN_P;
-			var leftP = controls.LEFT_P;
+			var leftP = controls.LEFT_P;*/
+			var upP = _hitbox.buttonUp.justPressed;
+			var rightP = _hitbox.buttonRight.justPressed;
+			var downP = _hitbox.buttonDown.justPressed;
+			var leftP = _hitbox.buttonLeft.justPressed;
 
-			var l1P = controls.L1_P;
+			/*var l1P = controls.L1_P;
 			var uP = controls.U1_P;
 			var r1P = controls.R1_P;
 			var l2P = controls.L2_P;
 			var dP = controls.D1_P;
-			var r2P = controls.R2_P;
+			var r2P = controls.R2_P;*/
+
+			var l1P = controls.L1_P || _hitbox.buttonLeft.justPressed;
+			var uP = controls.U1_P || _hitbox.buttonDown.justPressed;
+			var r1P = controls.R1_P || _hitbox.buttonUp.justPressed;
+			var l2P = controls.L2_P || _hitbox.buttonRight.justPressed;
+			var dP = controls.D1_P || _hitbox.buttonUp2.justPressed;
+			var r2P = controls.R2_P || _hitbox.buttonRight2.justPressed;
 
 			var n0P = controls.N0_P;
 			var n1P = controls.N1_P;
