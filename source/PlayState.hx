@@ -3111,35 +3111,35 @@ class PlayState extends MusicBeatState
 
 
 		// ---------- nine control ------------
-		var n0 = controls.N0;
-		var n1 = controls.N1;
-		var n2 = controls.N2;
-		var n3 = controls.N3;
-		var n4 = controls.N4;
-		var n5 = controls.N5;
-		var n6 = controls.N6;
-		var n7 = controls.N7;
-		var n8 = controls.N8;
+		var n0 = controls.N0 || _hitbox.buttonLeft.pressed;
+		var n1 = controls.N1 || _hitbox.buttonDown.pressed;
+		var n2 = controls.N2 || _hitbox.buttonUp.pressed;
+		var n3 = controls.N3 || _hitbox.buttonRight.pressed;
+		var n4 = controls.N4 || _hitbox.buttonUp2.pressed;
+		var n5 = controls.N5 || _hitbox.buttonRight2.pressed;
+		var n6 = controls.N6 || _hitbox.buttonLeft2.pressed;
+		var n7 = controls.N7 || _hitbox.buttonDown2.pressed;
+		var n8 = controls.N8 || _hitbox.buttonLeft3.pressed;
 
-		var n0P = controls.N0_P;
-		var n1P = controls.N1_P;
-		var n2P = controls.N2_P;
-		var n3P = controls.N3_P;
-		var n4P = controls.N4_P;
-		var n5P = controls.N5_P;
-		var n6P = controls.N6_P;
-		var n7P = controls.N7_P;
-		var n8P = controls.N8_P;
+		var n0P = controls.N0_P || _hitbox.buttonLeft.justPressed;
+		var n1P = controls.N1_P || _hitbox.buttonDown.justPressed;
+		var n2P = controls.N2_P || _hitbox.buttonUp.justPressed;
+		var n3P = controls.N3_P || _hitbox.buttonRight.justPressed;
+		var n4P = controls.N4_P || _hitbox.buttonUp2.justPressed;
+		var n5P = controls.N5_P || _hitbox.buttonRight2.justPressed;
+		var n6P = controls.N6_P || _hitbox.buttonLeft2.justPressed;
+		var n7P = controls.N7_P || _hitbox.buttonDown2.justPressed;
+		var n8P = controls.N8_P || _hitbox.buttonLeft3.justPressed;
 
-		var n0R = controls.N0_R;
-		var n1R = controls.N1_R;
-		var n2R = controls.N2_R;
-		var n3R = controls.N3_R;
-		var n4R = controls.N4_R;
-		var n5R = controls.N5_R;
-		var n6R = controls.N6_R;
-		var n7R = controls.N7_R;
-		var n8R = controls.N8_R;
+		var n0R = controls.N0_R || _hitbox.buttonLeft.justReleased;
+		var n1R = controls.N1_R || _hitbox.buttonDown.justReleased;
+		var n2R = controls.N2_R || _hitbox.buttonUp.justReleased;
+		var n3R = controls.N3_R || _hitbox.buttonRight.justReleased;
+		var n4R = controls.N4_R || _hitbox.buttonUp2.justReleased;
+		var n5R = controls.N5_R || _hitbox.buttonRight2.justReleased;
+		var n6R = controls.N6_R || _hitbox.buttonLeft2.justReleased;
+		var n7R = controls.N7_R || _hitbox.buttonDown2.justReleased;
+		var n8R = controls.N8_R || _hitbox.buttonLeft3.justReleased;
 
 		var ex1 = false;
 
@@ -3648,15 +3648,15 @@ class PlayState extends MusicBeatState
 			var dP = controls.D1_P || _hitbox.buttonUp2.justPressed;
 			var r2P = controls.R2_P || _hitbox.buttonRight2.justPressed;
 
-			var n0P = controls.N0_P;
-			var n1P = controls.N1_P;
-			var n2P = controls.N2_P;
-			var n3P = controls.N3_P;
-			var n4P = controls.N4_P;
-			var n5P = controls.N5_P;
-			var n6P = controls.N6_P;
-			var n7P = controls.N7_P;
-			var n8P = controls.N8_P;
+			var n0P = controls.N0_P || _hitbox.buttonLeft.justPressed;
+			var n1P = controls.N1_P || _hitbox.buttonDown.justPressed;
+			var n2P = controls.N2_P || _hitbox.buttonUp.justPressed;
+			var n3P = controls.N3_P || _hitbox.buttonRight.justPressed;
+			var n4P = controls.N4_P || _hitbox.buttonUp2.justPressed;
+			var n5P = controls.N5_P || _hitbox.buttonRight2.justPressed;
+			var n6P = controls.N6_P || _hitbox.buttonLeft2.justPressed;
+			var n7P = controls.N7_P || _hitbox.buttonDown2.justPressed;
+			var n8P = controls.N8_P || _hitbox.buttonLeft3.justPressed;
 			
 			if (mania == 0)
 			{
